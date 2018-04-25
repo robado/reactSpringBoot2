@@ -91,8 +91,8 @@ class Student extends React.Component {
         return (
             // Write your code here to render StudentTableRow
             <tr>
-                <td>{this.props.student.firstName}</td>
-                <td>{this.props.student.lastName}</td>
+                <td>{this.props.student.firstname}</td>
+                <td>{this.props.student.lastname}</td>
                 <td>{this.props.student.email}</td>
                 <td>
                     <button onClick={this.deleteStudent}>Delete</button>
