@@ -118,3 +118,42 @@ You can get an error, something like this:
       }
     };
     
+    
+    
+##Webpack won't output any file to bundle.js
+My webpack.config.js did not work so I had to changed it a bit. [I stumbled upon an webpack issue](https://github.com/webpack/webpack/issues/7098) that I tried and it worked for me. 
+It was a small changed but it was what did the job. 
+
+Previously I had:
+    
+    path: path.resolve(__dirname, '/src/main/resources/public')
+    
+But resolve did not do anything. Had to change it to:
+
+    path: path.join(__dirname, '/src/main/resources/public'),
+    
+This is how my webconfig looks like now:
+
+    var path = require('path');
+    
+    module.exports = {
+        mode: "production",
+        entry: './src/main/resources/public/App.js',
+        output: {
+            path: path.join(__dirname, '/src/main/resources/public'), 
+            filename: 'bundle.js',
+            publicPath: '/'
+        },
+        module: {
+            rules: [
+                {
+                    test: /.js$/,
+                    loaders: 'babel-loader',
+                    exclude: /(node_modules)/,
+                    query: {
+                        presets: ['es2015', 'react']
+                    }
+                }
+            ]
+        }
+    };
