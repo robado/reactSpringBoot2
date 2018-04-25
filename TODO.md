@@ -4,7 +4,7 @@
     npm install -g webpack
 Didn't install webpack
 
-    npm install --save-dev webpack
+    npm install --save-dev webpack, 
     
 Gives a lot of errors
 
@@ -16,7 +16,7 @@ Gives a lot of errors
 
 Commands that installed - but didn't work
 
-    npm i -g webpack-cli, npm install --save-dev webpack 
+    npm i -g webpack-cli, npm install --save-dev webpack, npm install -g webpack
     
 I found a fix for webpack-cli! (I think that this works good)
 -
