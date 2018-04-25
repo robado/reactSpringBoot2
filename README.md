@@ -12,7 +12,7 @@ Run application:
     
 #### 2. Run webpack
     
-    webpack
+    webpack???
     
 #### 3. Run application
 
