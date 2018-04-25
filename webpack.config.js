@@ -1,9 +1,10 @@
 var path = require('path');
 
 module.exports = {
+    mode: "production",
     entry: './src/main/resources/public/App.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '/src/main/resources/public'),
         filename: 'bundle.js',
         publicPath: '/'
     },

@@ -23,8 +23,9 @@ I found a fix for webpack-cli! (I think that this works good)
 So this was my old code 
 
 webpack.config.js
->var path = require('path');
- module.exports = {
+
+    var path = require('path');
+    module.exports = {
      entry: './src/main/resources/public/App.js',
      output: {
          path: path.resolve(__dirname, 'dist'),
@@ -43,7 +44,7 @@ webpack.config.js
              }
          ]
      }
- };
+    };
 
  Because instruction I got were a bit old and outdated.... So I had to search web a bit...
  
@@ -59,8 +60,8 @@ But the newest webpack does not use that anymore! So I had to change it to:
     
 And this is how my code looks like now.
     
- >var path = require('path');
-  module.exports = {
+    var path = require('path');
+    module.exports = {
       entry: './src/main/resources/public/App.js',
       output: {
           path: path.resolve(__dirname, 'dist'),
@@ -79,4 +80,41 @@ And this is how my code looks like now.
               }
           ]
       }
-  };
+    };
+  
+###Webpack.config.js
+
+When you first run the:
+
+    webpack-cli
+    
+You can get an error, something like this:
+>WARNING in configuration
+ The 'mode' option has not been set, webpack will fallback to 'production' for this value. Set 'mode' option to 'development' or 'production' to enable defaults for each environment.
+ You can also set it to 'none' to disable any default behavior. Learn more: https://webpack.js.org/concepts/mode/
+ 
+ It is easy to fix. You just have to set the mode:
+ 
+    var path = require('path');
+    module.exports = {
+      mode: "production", <--this was added
+      entry: './src/main/resources/public/App.js',
+      output: {
+          path: path.resolve(__dirname, 'dist'),
+          filename: 'bundle.js',
+          publicPath: '/'
+      },
+      module: {
+          rules: [
+              {
+                  test: /.js$/,
+                  loaders: 'babel-loader',
+                  exclude: /(node_modules)/,
+                  query: {
+                      presets: ['es2015', 'react']
+                  }
+              }
+          ]
+      }
+    };
+    

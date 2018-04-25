@@ -30,6 +30,11 @@ class App extends React.Component {
     // Delete student
     deleteStudent(student) {
         // DELETE Fetch call to delete student
+        fetch(student._links.self.href, {
+            method: 'DELETE',
+            credentials: 'same-origin'})
+            .then(res => this.loadStudentsFromServer()
+            )
     }
 
     // Create new student
@@ -56,9 +61,17 @@ class StudentTable extends React.Component {
     }
 
     render() {
-
+        const students = this.props.students.map(student =>
+            <Student key={student._links.self.href} student={student} deleteStudent={this.props.deleteStudent} />
+        );
         return (
-            <div></div>
+            <table>
+                <tbody>
+                <tr><th>FirstName</th><th>LastName</th><th>Email</th>
+                </tr>
+                {students}
+                </tbody>
+            </table>
         );
     }
 }
@@ -66,6 +79,7 @@ class StudentTable extends React.Component {
 class Student extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {editShow: false};
         this.deleteStudent = this.deleteStudent.bind(this);
     }
 
@@ -74,6 +88,17 @@ class Student extends React.Component {
     }
 
     render() {
+        return (
+            // Write your code here to render StudentTableRow
+            <tr>
+                <td>{this.props.student.firstName}</td>
+                <td>{this.props.student.lastName}</td>
+                <td>{this.props.student.email}</td>
+                <td>
+                    <button onClick={this.deleteStudent}>Delete</button>
+                </td>
+            </tr>
+        );
     }
 }
 
