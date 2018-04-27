@@ -92,6 +92,8 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -108,6 +110,7 @@ var App = function (_React$Component) {
 
         _this.deleteStudent = _this.deleteStudent.bind(_this);
         _this.createStudent = _this.createStudent.bind(_this);
+        //this.updateStudent = this.updateStudent.bind(this);
 
         _this.state = {
             students: []
@@ -144,7 +147,6 @@ var App = function (_React$Component) {
         value: function deleteStudent(student) {
             var _this3 = this;
 
-            // DELETE Fetch call to delete student
             fetch(student._links.self.href, {
                 method: 'DELETE',
                 credentials: 'same-origin' }).then(function (res) {
@@ -157,19 +159,47 @@ var App = function (_React$Component) {
     }, {
         key: 'createStudent',
         value: function createStudent(student) {
-            // POST Fetch call to add student
+            var _this4 = this;
+
+            fetch('http://localhost:8080/api/students', { method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(student)
+            }).then(function (res) {
+                return _this4.loadStudentsFromServer();
+            });
         }
+
+        /*updateStudent(student) {
+            fetch(student.link,
+                {
+                    method: 'PUT',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(student)
+                })
+                .then(
+                    res => this.loadStudentsFromServer()
+                )
+        }*/
+
     }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(StudentForm, {
-                    createStudent: this.createStudent }),
                 _react2.default.createElement(StudentTable, {
                     deleteStudent: this.deleteStudent,
-                    students: this.state.students })
+                    students: this.state.students
+                    //updateStudent={this.updateStudent}
+                }),
+                _react2.default.createElement(StudentForm, {
+                    createStudent: this.createStudent })
             );
         }
     }]);
@@ -189,14 +219,14 @@ var StudentTable = function (_React$Component2) {
     _createClass(StudentTable, [{
         key: 'render',
         value: function render() {
-            var _this5 = this;
+            var _this6 = this;
 
             var students = this.props.students.map(function (student) {
-                return _react2.default.createElement(Student, { key: student._links.self.href, student: student, deleteStudent: _this5.props.deleteStudent });
+                return _react2.default.createElement(Student, { key: student._links.self.href, student: student, deleteStudent: _this6.props.deleteStudent /*updateStudent={this.props.updateStudent}*/ });
             });
             return _react2.default.createElement(
                 'table',
-                null,
+                { className: 'table table-striped' },
                 _react2.default.createElement(
                     'tbody',
                     null,
@@ -234,11 +264,11 @@ var Student = function (_React$Component3) {
     function Student(props) {
         _classCallCheck(this, Student);
 
-        var _this6 = _possibleConstructorReturn(this, (Student.__proto__ || Object.getPrototypeOf(Student)).call(this, props));
+        var _this7 = _possibleConstructorReturn(this, (Student.__proto__ || Object.getPrototypeOf(Student)).call(this, props));
 
-        _this6.state = { editShow: false };
-        _this6.deleteStudent = _this6.deleteStudent.bind(_this6);
-        return _this6;
+        _this7.state = { editShow: false };
+        _this7.deleteStudent = _this7.deleteStudent.bind(_this7);
+        return _this7;
     }
 
     _createClass(Student, [{
@@ -292,23 +322,29 @@ var StudentForm = function (_React$Component4) {
     function StudentForm(props) {
         _classCallCheck(this, StudentForm);
 
-        var _this7 = _possibleConstructorReturn(this, (StudentForm.__proto__ || Object.getPrototypeOf(StudentForm)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (StudentForm.__proto__ || Object.getPrototypeOf(StudentForm)).call(this, props));
 
-        _this7.state = { firstname: '', lastname: '', email: '' };
-        _this7.handleSubmit = _this7.handleSubmit.bind(_this7);
-        _this7.handleChange = _this7.handleChange.bind(_this7);
-        return _this7;
+        _this8.state = { firstname: '', lastname: '', email: '' };
+        _this8.handleSubmit = _this8.handleSubmit.bind(_this8);
+        _this8.handleChange = _this8.handleChange.bind(_this8);
+        return _this8;
     }
 
     _createClass(StudentForm, [{
         key: 'handleChange',
         value: function handleChange(event) {
             // Set states here
+            this.setState(_defineProperty({}, event.target.name, event.target.value));
         }
     }, {
         key: 'handleSubmit',
         value: function handleSubmit(event) {
             // Create new srudent object and call createStudent
+            event.preventDefault();
+            console.log("Firstname: " + this.state.firstname);
+            var newStudent = { firstname: this.state.firstname, lastname: this.state.lastname, email: this.state.email };
+            this.props.createStudent(newStudent);
+            //this.refs.simpleDialog.hide();
         }
     }, {
         key: 'render',
@@ -359,6 +395,54 @@ var StudentForm = function (_React$Component4) {
 
     return StudentForm;
 }(_react2.default.Component);
+
+/*class StudentUpdateForm extends React.Component {
+    constructor(props) {
+    super(props);
+    this.state = {firstname: this.props.student.firstname, lastname: this.props.student.lastname, email: this.props.student.email};
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+}
+      handleChange(event) {
+    this.setState(
+    {[event.target.name]: event.target.value}
+    );
+}
+      handleSubmit(event) {
+    event.preventDefault();
+    var updStudent = {link: this.props.student._links.self.href ,firstname: this.state.firstname, lastname: this.state.lastname, email: this.state.email};
+    this.props.updateStudent(updStudent);
+    //this.refs.editDialog.hide();
+}
+      render() {
+    return (
+    <div>
+    <div className="panel panel-default">
+    <div className="panel-heading">Edit student</div>
+    <div className="panel-body">
+    <form className="form">
+    <div className="col-md-4">
+    <input type="text" placeholder="Firstname" className="form-control"  name="firstname" value={this.state.firstname} onChange={this.handleChange}/>
+    </div>
+    <div className="col-md-4">
+    <input type="text" placeholder="Lastname" className="form-control" name="lastname" value={this.state.lastname} onChange={this.handleChange}/>
+    </div>
+    <div className="col-md-4">
+    <input type="text" placeholder="Email" className="form-control" name="email" value={this.state.email} onChange={this.handleChange}/>
+    </div>
+    <div className="col-md-2">
+    <button className="btn btn-primary" onClick={this.handleSubmit}>Save</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    <div>
+    <button className="btn btn-primary btn-xs" onClick={() => this.refs.editDialog.show()}>Edit</button>
+    </div>
+    </div>
+    );
+}
+}*/
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('react'));
 
