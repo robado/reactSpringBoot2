@@ -1,10 +1,10 @@
 var path = require('path');
 
 module.exports = {
-    mode: "production",
-    entry: './src/main/resources/public/App.js',
+    mode: "none",
+    entry: './src/main/resources/static/App.js',
     output: {
-        path: path.join(__dirname, '/src/main/resources/public'),
+        path: path.join(__dirname, '/src/main/resources/static'),
         filename: 'bundle.js',
         publicPath: '/'
     },
