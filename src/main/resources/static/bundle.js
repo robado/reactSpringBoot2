@@ -304,7 +304,7 @@ var Student = function (_React$Component3) {
                         null,
                         _react2.default.createElement(
                             'button',
-                            { 'class': 'btn btn-danger', onClick: this.deleteStudent },
+                            { className: 'btn btn-danger', onClick: this.deleteStudent },
                             'Delete'
                         )
                     )

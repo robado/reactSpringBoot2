@@ -124,7 +124,7 @@ class Student extends React.Component {
                 <td>{this.props.student.email}</td>
 
                 <td>
-                    <button class="btn btn-danger" onClick={this.deleteStudent}>Delete</button>
+                    <button className="btn btn-danger" onClick={this.deleteStudent}>Delete</button>
                 </td>
             </tr>
         );
