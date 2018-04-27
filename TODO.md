@@ -1,5 +1,5 @@
 # TODO's and Errors
--
+
 ### Webpack
     npm install -g webpack
 Didn't install webpack
@@ -82,7 +82,7 @@ And this is how my code looks like now.
       }
     };
   
-###Webpack.config.js
+### Webpack.config.js
 
 When you first run the:
 
@@ -120,7 +120,7 @@ You can get an error, something like this:
     
     
     
-##Webpack won't output any file to bundle.js
+## Webpack won't output any file to bundle.js
 My webpack.config.js did not work so I had to changed it a bit. [I stumbled upon an webpack issue](https://github.com/webpack/webpack/issues/7098) that I tried and it worked for me. 
 It was a small changed but it was what did the job. 
 
